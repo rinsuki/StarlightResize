@@ -312,6 +312,7 @@ namespace StarlightResize
             buttonSetResTo1280.TabIndex = 9;
             buttonSetResTo1280.Text = "←長辺1280";
             buttonSetResTo1280.UseVisualStyleBackColor = true;
+            buttonSetResTo1280.Click += new System.EventHandler(this.buttonSetResTo1280_Click);
             // 
             // buttonSetResTo1920
             // 
@@ -322,6 +323,7 @@ namespace StarlightResize
             buttonSetResTo1920.TabIndex = 10;
             buttonSetResTo1920.Text = "←1920";
             buttonSetResTo1920.UseVisualStyleBackColor = true;
+            buttonSetResTo1920.Click += new System.EventHandler(this.buttonSetResTo1920_Click);
             // 
             // buttonSetResTo2560
             // 
@@ -332,6 +334,7 @@ namespace StarlightResize
             buttonSetResTo2560.TabIndex = 20;
             buttonSetResTo2560.Text = "←2560";
             buttonSetResTo2560.UseVisualStyleBackColor = true;
+            buttonSetResTo2560.Click += new System.EventHandler(this.buttonSetResTo2560_Click);
             // 
             // buttonSetResTo3840
             // 
@@ -341,6 +344,7 @@ namespace StarlightResize
             buttonSetResTo3840.TabIndex = 21;
             buttonSetResTo3840.Text = "←3840";
             buttonSetResTo3840.UseVisualStyleBackColor = true;
+            buttonSetResTo3840.Click += new System.EventHandler(this.buttonSetResTo3840_Click);
             // 
             // buttonSetResToDisplay
             // 
@@ -351,6 +355,7 @@ namespace StarlightResize
             buttonSetResToDisplay.TabIndex = 11;
             buttonSetResToDisplay.Text = "←ディスプレイ解像度";
             buttonSetResToDisplay.UseVisualStyleBackColor = true;
+            buttonSetResToDisplay.Click += new System.EventHandler(this.buttonSetResToDisplay_Click);
             // 
             // checkBoxSetResToDisplayAutomatically
             // 
@@ -371,6 +376,7 @@ namespace StarlightResize
             this.buttonResize.TabIndex = 22;
             this.buttonResize.Text = "実行！";
             this.buttonResize.UseVisualStyleBackColor = true;
+            this.buttonResize.Click += new System.EventHandler(this.buttonResize_Click);
             // 
             // Form1
             // 
