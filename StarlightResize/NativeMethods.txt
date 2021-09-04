@@ -1,0 +1,4 @@
+﻿GetWindowRect
+GetClientRect
+ClientToScreen
+MoveWindow
