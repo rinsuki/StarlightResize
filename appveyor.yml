@@ -18,7 +18,7 @@ build_script:
 - dotnet publish "StarlightResize/StarlightResize.csproj" -c Release
 
 after_build:
-- mv StarlightResize/bin/Release/net5.0-windows/win-x86/publish publish
+- mv StarlightResize/bin/Release/net5.0-windows/win-x64/publish publish
 - 7z a StarlightResize.$(version).zip publish/* LICENSE.txt
 
 artifacts:
