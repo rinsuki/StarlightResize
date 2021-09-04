@@ -1,11 +1,21 @@
 version: 0.1.0.{build}
 image: Visual Studio 2019
 
+dotnet_csproj:
+  patch: true
+  file: '**\*.csproj'
+  version: '{version}'
+  version_prefix: '{version}'
+  package_version: '{version}'
+  assembly_version: '{version}'
+  file_version: '{version}'
+  informational_version: '{version}'
+
 before_build:
 - dotnet restore "StarlightResize/StarlightResize.csproj"
 
-build:
-  project: StarlightResize.sln
+build_script:
+- dotnet publish "StarlightResize/StarlightResize.csproj" -c Release
 
 after_build:
 - mv StarlightResize/bin/Release/net5.0-windows/win-x86/publish publish
