@@ -18,10 +18,10 @@ build_script:
 - dotnet publish "StarlightResize/StarlightResize.csproj" -c Release
 
 after_build:
-- mv StarlightResize/bin/Release/net5.0-windows/win-x64/publish publish
-- cp LICENSE.txt publish/
-- cp README.md publish/README.txt
-- 7z a StarlightResize.%APPVEYOR_BUILD_VERSION%.zip publish/* 
+- mv StarlightResize/bin/Release/net5.0-windows/win-x64/publish StarlightResize.%APPVEYOR_BUILD_VERSION%
+- cp LICENSE.txt StarlightResize.%APPVEYOR_BUILD_VERSION%/
+- cp README.md StarlightResize.%APPVEYOR_BUILD_VERSION%/README.txt
+- 7z a StarlightResize.%APPVEYOR_BUILD_VERSION%.zip StarlightResize.%APPVEYOR_BUILD_VERSION%/* 
 
 artifacts:
 - path: StarlightResize.$(APPVEYOR_BUILD_VERSION).zip
