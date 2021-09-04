@@ -21,7 +21,7 @@ after_build:
 - mv StarlightResize/bin/Release/net5.0-windows/win-x64/publish publish
 - cp LICENSE.txt publish/
 - cp README.md publish/README.txt
-- 7z a StarlightResize.{{version}}.zip publish/* 
+- 7z a "StarlightResize.$env:APPVEYOR_BUILD_VERSION.zip" publish/* 
 
 artifacts:
-- path: StarlightResize.{{version}}.zip
+- path: StarlightResize.$(APPVEYOR_BUILD_VERSION).zip
