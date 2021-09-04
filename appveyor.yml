@@ -4,8 +4,10 @@ image: Visual Studio 2019
 before_build:
 - dotnet restore "StarlightResize/StarlightResize.csproj"
 
-build_script:
-- dotnet publish "StarlightResize/StarlightResize.csproj" -c Release --self-contained false -p:AssemblyVersion="$(version)"
+build:
+  project: StarlightResize.sln
+
+after_build:
 - mv StarlightResize/bin/Release/net5.0-windows/win-x86/publish publish
 - 7z a StarlightResize.$(version).zip publish/* LICENSE.txt
 
