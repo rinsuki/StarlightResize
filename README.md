@@ -31,7 +31,7 @@ DISCLAIMER: このツールは MIT License でライセンスされています�
 ## How to Run
 
 1. インストールしていない場合は https://dotnet.microsoft.com/download/dotnet/5.0 から .NET 5 Desktop Runtime をインストールする
-1. zipをダウンロードして中にある StarlightResize.exe を実行する
+1. [Releases](https://github.com/rinsuki/StarlightResize/releases) から zipをダウンロードして中にある StarlightResize.exe を実行する
 
 ## FAQ
 
