@@ -235,6 +235,7 @@ namespace StarlightResize
             flowLayoutPanel1.Name = "flowLayoutPanel1";
             flowLayoutPanel1.Size = new System.Drawing.Size(611, 29);
             flowLayoutPanel1.TabIndex = 6;
+            flowLayoutPanel1.WrapContents = false;
             // 
             // label4
             // 
