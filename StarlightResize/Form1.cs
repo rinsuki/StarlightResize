@@ -4,12 +4,16 @@ using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Windows.Win32;
 using Windows.Win32.Foundation;
+using Windows.Win32.Graphics.Gdi;
+using Windows.Win32.Storage.Xps;
 
 namespace StarlightResize
 {
@@ -125,6 +129,59 @@ namespace StarlightResize
                 return;
             }
             SetResolution(screen.Bounds.Width, screen.Bounds.Height);
+        }
+
+        private void buttonScreenShot_Click(object sender, EventArgs e)
+        {
+            // とりあえず保存先を作っておく
+            // TODO: 保存先を変えられるようにする
+            var picturesFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures, Environment.SpecialFolderOption.Create);
+            var starlightResizePicturesFolder = picturesFolder + "\\StarlightResize";
+            Directory.CreateDirectory(starlightResizePicturesFolder);
+
+            var process = Process.GetProcessesByName("imascgstage").FirstOrDefault();
+            if (process == null)
+            {
+                MessageBox.Show("デレステのウィンドウが見つかりませんでした。\nデレステが起動していることを確認してください。", "StarlightResize", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            var hWnd = (HWND)process.MainWindowHandle;
+            PInvoke.GetClientRect(hWnd, out var clientRect);
+            // 絶妙に黒に近い色がなんか透過色になってしまう (GIFじゃねーんだぞ)
+            // ホーム画面に [吹きすさぶ青嵐] 渋谷凛 (特訓前) を指定して
+            // その上に何らかのモーダル (お知らせとか) を重ねると吹き出しのあたりで再現する
+            // とりあえず 24bpp にすることで #000000 になるので透過されてしまっているよりは目立ちにくいが
+            // よ～く見るとわかってしまうのでそのうちなんとかしたい
+            // というかそもそも Windows.Graphics.Capture API を使うべきである (かなり新しい Windows 10 でないと使えないが)
+            using var bitmap = new Bitmap(clientRect.right - clientRect.left, clientRect.bottom - clientRect.top, PixelFormat.Format24bppRgb);
+            var graphics = Graphics.FromImage(bitmap);
+            var dc = (HDC)graphics.GetHdc();
+            // Windows 7 だと PW_RENDERFULLCONTENT が使えないので動かないかも (いい加減 10 にしてください)
+            // というかそもそも Windows.Graphics.Capture API を…
+            bool result = PInvoke.PrintWindow(hWnd, dc, PRINT_WINDOW_FLAGS.PW_CLIENTONLY | (PRINT_WINDOW_FLAGS)Constants.PW_RENDERFULLCONTENT);
+            graphics.ReleaseHdc(dc);
+            graphics.Dispose();
+            byte[] png;
+            using (var stream = new MemoryStream())
+            {
+                bitmap.Save(stream, ImageFormat.Png);
+                png = stream.ToArray();
+            }
+
+            string GetNotExistsFileName(string prefix, string suffix, int i = 0)
+            {
+                if (i > 9) throw new Exception("ファイル多すぎです");
+                var path = i == 0 ? $"{prefix}{suffix}" : $"{prefix}_{i}{suffix}";
+                if (!File.Exists(path)) return path;
+                return GetNotExistsFileName(prefix, suffix, i + 1);
+            }
+
+            var path = GetNotExistsFileName($"{starlightResizePicturesFolder}\\{DateTime.Now.ToString("yyyyMMdd_HHmmss")}", ".png");
+            using (var stream = new FileStream(path, FileMode.Create))
+            {
+                stream.Write(png);
+            }
+            Clipboard.SetImage(Image.FromStream(new MemoryStream(png)));
         }
     }
 }

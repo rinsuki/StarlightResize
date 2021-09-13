@@ -43,6 +43,7 @@ namespace StarlightResize
             System.Windows.Forms.Button buttonSetResTo2560;
             System.Windows.Forms.Button buttonSetResTo3840;
             System.Windows.Forms.Button buttonSetResToDisplay;
+            System.Windows.Forms.Button buttonScreenShot;
             this.radioButtonPosLeftTop = new System.Windows.Forms.RadioButton();
             this.radioButtonPosLeftBottom = new System.Windows.Forms.RadioButton();
             this.radioButtonPosCenter = new System.Windows.Forms.RadioButton();
@@ -67,6 +68,7 @@ namespace StarlightResize
             buttonSetResTo2560 = new System.Windows.Forms.Button();
             buttonSetResTo3840 = new System.Windows.Forms.Button();
             buttonSetResToDisplay = new System.Windows.Forms.Button();
+            buttonScreenShot = new System.Windows.Forms.Button();
             tableLayoutPanel1.SuspendLayout();
             tableLayoutPanel2.SuspendLayout();
             flowLayoutPanel1.SuspendLayout();
@@ -379,11 +381,22 @@ namespace StarlightResize
             this.buttonResize.UseVisualStyleBackColor = true;
             this.buttonResize.Click += new System.EventHandler(this.buttonResize_Click);
             // 
+            // buttonScreenShot
+            // 
+            buttonScreenShot.Location = new System.Drawing.Point(11, 178);
+            buttonScreenShot.Name = "buttonScreenShot";
+            buttonScreenShot.Size = new System.Drawing.Size(99, 23);
+            buttonScreenShot.TabIndex = 24;
+            buttonScreenShot.Text = "スクリーンショット";
+            buttonScreenShot.UseVisualStyleBackColor = true;
+            buttonScreenShot.Click += new System.EventHandler(this.buttonScreenShot_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(700, 181);
+            this.ClientSize = new System.Drawing.Size(700, 213);
+            this.Controls.Add(buttonScreenShot);
             this.Controls.Add(tableLayoutPanel1);
             this.Controls.Add(this.buttonResize);
             this.Font = new System.Drawing.Font("Yu Gothic UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);

@@ -2,3 +2,8 @@
 GetClientRect
 ClientToScreen
 MoveWindow
+GetDC
+ReleaseDC
+PrintWindow
+PW_CLIENTONLY
+PW_RENDERFULLCONTENT
