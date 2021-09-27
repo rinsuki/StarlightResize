@@ -44,6 +44,7 @@ namespace StarlightResize
             System.Windows.Forms.Button buttonSetResTo3840;
             System.Windows.Forms.Button buttonSetResToDisplay;
             System.Windows.Forms.Button buttonScreenShot;
+            System.Windows.Forms.Button buttonOpenScreenShotFolder;
             this.radioButtonPosLeftTop = new System.Windows.Forms.RadioButton();
             this.radioButtonPosLeftBottom = new System.Windows.Forms.RadioButton();
             this.radioButtonPosCenter = new System.Windows.Forms.RadioButton();
@@ -54,6 +55,7 @@ namespace StarlightResize
             this.numericUpDownHeight = new System.Windows.Forms.NumericUpDown();
             this.checkBoxSetResToDisplayAutomatically = new System.Windows.Forms.CheckBox();
             this.buttonResize = new System.Windows.Forms.Button();
+            this.labelScreenShotState = new System.Windows.Forms.Label();
             tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             label1 = new System.Windows.Forms.Label();
@@ -69,6 +71,7 @@ namespace StarlightResize
             buttonSetResTo3840 = new System.Windows.Forms.Button();
             buttonSetResToDisplay = new System.Windows.Forms.Button();
             buttonScreenShot = new System.Windows.Forms.Button();
+            buttonOpenScreenShotFolder = new System.Windows.Forms.Button();
             tableLayoutPanel1.SuspendLayout();
             tableLayoutPanel2.SuspendLayout();
             flowLayoutPanel1.SuspendLayout();
@@ -371,16 +374,6 @@ namespace StarlightResize
             this.checkBoxSetResToDisplayAutomatically.Text = "ディスプレイ変更時に解像度を自動更新 (現在未実装)";
             this.checkBoxSetResToDisplayAutomatically.UseVisualStyleBackColor = true;
             // 
-            // buttonResize
-            // 
-            this.buttonResize.Location = new System.Drawing.Point(11, 148);
-            this.buttonResize.Name = "buttonResize";
-            this.buttonResize.Size = new System.Drawing.Size(75, 23);
-            this.buttonResize.TabIndex = 22;
-            this.buttonResize.Text = "実行！";
-            this.buttonResize.UseVisualStyleBackColor = true;
-            this.buttonResize.Click += new System.EventHandler(this.buttonResize_Click);
-            // 
             // buttonScreenShot
             // 
             buttonScreenShot.Location = new System.Drawing.Point(11, 178);
@@ -391,11 +384,43 @@ namespace StarlightResize
             buttonScreenShot.UseVisualStyleBackColor = true;
             buttonScreenShot.Click += new System.EventHandler(this.buttonScreenShot_Click);
             // 
+            // buttonOpenScreenShotFolder
+            // 
+            buttonOpenScreenShotFolder.Location = new System.Drawing.Point(569, 178);
+            buttonOpenScreenShotFolder.Name = "buttonOpenScreenShotFolder";
+            buttonOpenScreenShotFolder.Size = new System.Drawing.Size(118, 23);
+            buttonOpenScreenShotFolder.TabIndex = 25;
+            buttonOpenScreenShotFolder.Text = "SSの保存場所を開く";
+            buttonOpenScreenShotFolder.UseVisualStyleBackColor = true;
+            buttonOpenScreenShotFolder.Click += new System.EventHandler(this.buttonOpenScreenShotFolder_Click);
+            // 
+            // buttonResize
+            // 
+            this.buttonResize.Location = new System.Drawing.Point(11, 148);
+            this.buttonResize.Name = "buttonResize";
+            this.buttonResize.Size = new System.Drawing.Size(75, 23);
+            this.buttonResize.TabIndex = 22;
+            this.buttonResize.Text = "実行！";
+            this.buttonResize.UseVisualStyleBackColor = true;
+            this.buttonResize.Click += new System.EventHandler(this.buttonResize_Click);
+            // 
+            // labelScreenShotState
+            // 
+            this.labelScreenShotState.AutoSize = true;
+            this.labelScreenShotState.Location = new System.Drawing.Point(116, 182);
+            this.labelScreenShotState.Name = "labelScreenShotState";
+            this.labelScreenShotState.Size = new System.Drawing.Size(55, 15);
+            this.labelScreenShotState.TabIndex = 26;
+            this.labelScreenShotState.Text = "準備完了";
+            this.labelScreenShotState.UseMnemonic = false;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(700, 213);
+            this.Controls.Add(this.labelScreenShotState);
+            this.Controls.Add(buttonOpenScreenShotFolder);
             this.Controls.Add(buttonScreenShot);
             this.Controls.Add(tableLayoutPanel1);
             this.Controls.Add(this.buttonResize);
@@ -429,6 +454,7 @@ namespace StarlightResize
         private System.Windows.Forms.NumericUpDown numericUpDownHeight;
         private System.Windows.Forms.CheckBox checkBoxSetResToDisplayAutomatically;
         private System.Windows.Forms.Button buttonResize;
+        private System.Windows.Forms.Label labelScreenShotState;
     }
 }
 

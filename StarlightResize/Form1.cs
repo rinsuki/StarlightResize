@@ -130,14 +130,20 @@ namespace StarlightResize
             }
             SetResolution(screen.Bounds.Width, screen.Bounds.Height);
         }
+        
+        private string getScreenshotFolder()
+        {
+            var picturesFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures, Environment.SpecialFolderOption.Create);
+            var starlightResizePicturesFolder = picturesFolder + "\\StarlightResize";
+            Directory.CreateDirectory(starlightResizePicturesFolder);
+            return starlightResizePicturesFolder;
+        }
 
         private void buttonScreenShot_Click(object sender, EventArgs e)
         {
             // とりあえず保存先を作っておく
             // TODO: 保存先を変えられるようにする
-            var picturesFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures, Environment.SpecialFolderOption.Create);
-            var starlightResizePicturesFolder = picturesFolder + "\\StarlightResize";
-            Directory.CreateDirectory(starlightResizePicturesFolder);
+            var starlightResizePicturesFolder = getScreenshotFolder();
 
             var process = Process.GetProcessesByName("imascgstage").FirstOrDefault();
             if (process == null)
@@ -176,12 +182,18 @@ namespace StarlightResize
                 return GetNotExistsFileName(prefix, suffix, i + 1);
             }
 
+            Clipboard.SetImage(Image.FromStream(new MemoryStream(png)));
             var path = GetNotExistsFileName($"{starlightResizePicturesFolder}\\{DateTime.Now.ToString("yyyyMMdd_HHmmss")}", ".png");
             using (var stream = new FileStream(path, FileMode.Create))
             {
                 stream.Write(png);
             }
-            Clipboard.SetImage(Image.FromStream(new MemoryStream(png)));
+            labelScreenShotState.Text = $"{Path.GetFileName(path)} に保存しました";
+        }
+
+        private void buttonOpenScreenShotFolder_Click(object sender, EventArgs e)
+        {
+            Process.Start("explorer.exe", getScreenshotFolder());
         }
     }
 }
