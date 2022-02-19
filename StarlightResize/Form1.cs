@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -178,6 +178,11 @@ namespace StarlightResize
         private void buttonSetResTo3840_Click(object sender, EventArgs e)
         {
             SetResolution(3840, 2160);
+        }
+
+        private void buttonSetResTo7680_Click(object sender, EventArgs e)
+        {
+            SetResolution(7680, 4320);
         }
 
         private void buttonSetResToDisplay_Click(object sender, EventArgs e)

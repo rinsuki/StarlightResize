@@ -29,6 +29,7 @@ namespace StarlightResize
             System.Windows.Forms.Button buttonSetResTo1920;
             System.Windows.Forms.Button buttonSetResTo2560;
             System.Windows.Forms.Button buttonSetResTo3840;
+            System.Windows.Forms.Button buttonSetResTo7680;
             System.Windows.Forms.Button buttonSetResToDisplay;
             System.Windows.Forms.Button buttonScreenShot;
             System.Windows.Forms.Button buttonOpenScreenShotFolder;
@@ -56,6 +57,7 @@ namespace StarlightResize
             buttonSetResTo1920 = new System.Windows.Forms.Button();
             buttonSetResTo2560 = new System.Windows.Forms.Button();
             buttonSetResTo3840 = new System.Windows.Forms.Button();
+            buttonSetResTo7680 = new System.Windows.Forms.Button();
             buttonSetResToDisplay = new System.Windows.Forms.Button();
             buttonScreenShot = new System.Windows.Forms.Button();
             buttonOpenScreenShotFolder = new System.Windows.Forms.Button();
@@ -82,14 +84,14 @@ namespace StarlightResize
             tableLayoutPanel1.Controls.Add(label2, 0, 1);
             tableLayoutPanel1.Controls.Add(flowLayoutPanel1, 1, 1);
             tableLayoutPanel1.Controls.Add(this.checkBoxSetResToDisplayAutomatically, 1, 2);
-            tableLayoutPanel1.Location = new System.Drawing.Point(11, 9);
+            tableLayoutPanel1.Location = new System.Drawing.Point(12, 9);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 4;
             tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            tableLayoutPanel1.Size = new System.Drawing.Size(679, 133);
+            tableLayoutPanel1.Size = new System.Drawing.Size(742, 133);
             tableLayoutPanel1.TabIndex = 23;
             // 
             // tableLayoutPanel2
@@ -174,7 +176,7 @@ namespace StarlightResize
             this.comboBoxDisplay.FormattingEnabled = true;
             this.comboBoxDisplay.Location = new System.Drawing.Point(71, 3);
             this.comboBoxDisplay.Name = "comboBoxDisplay";
-            this.comboBoxDisplay.Size = new System.Drawing.Size(605, 23);
+            this.comboBoxDisplay.Size = new System.Drawing.Size(668, 23);
             this.comboBoxDisplay.TabIndex = 3;
             // 
             // label1
@@ -220,12 +222,13 @@ namespace StarlightResize
             flowLayoutPanel1.Controls.Add(buttonSetResTo1920);
             flowLayoutPanel1.Controls.Add(buttonSetResTo2560);
             flowLayoutPanel1.Controls.Add(buttonSetResTo3840);
+            flowLayoutPanel1.Controls.Add(buttonSetResTo7680);
             flowLayoutPanel1.Controls.Add(buttonSetResToDisplay);
             flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Left;
             flowLayoutPanel1.Location = new System.Drawing.Point(68, 29);
             flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
             flowLayoutPanel1.Name = "flowLayoutPanel1";
-            flowLayoutPanel1.Size = new System.Drawing.Size(611, 29);
+            flowLayoutPanel1.Size = new System.Drawing.Size(674, 29);
             flowLayoutPanel1.TabIndex = 6;
             flowLayoutPanel1.WrapContents = false;
             // 
@@ -339,10 +342,20 @@ namespace StarlightResize
             buttonSetResTo3840.UseVisualStyleBackColor = true;
             buttonSetResTo3840.Click += new System.EventHandler(this.buttonSetResTo3840_Click);
             // 
+            // buttonSetResTo7680
+            // 
+            buttonSetResTo7680.Location = new System.Drawing.Point(493, 3);
+            buttonSetResTo7680.Name = "buttonSetResTo7680";
+            buttonSetResTo7680.Size = new System.Drawing.Size(57, 23);
+            buttonSetResTo7680.TabIndex = 22;
+            buttonSetResTo7680.Text = "←7680";
+            buttonSetResTo7680.UseVisualStyleBackColor = true;
+            buttonSetResTo7680.Click += new System.EventHandler(this.buttonSetResTo7680_Click);
+            // 
             // buttonSetResToDisplay
             // 
             buttonSetResToDisplay.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            buttonSetResToDisplay.Location = new System.Drawing.Point(493, 3);
+            buttonSetResToDisplay.Location = new System.Drawing.Point(556, 3);
             buttonSetResToDisplay.Name = "buttonSetResToDisplay";
             buttonSetResToDisplay.Size = new System.Drawing.Size(115, 23);
             buttonSetResToDisplay.TabIndex = 11;
@@ -405,7 +418,7 @@ namespace StarlightResize
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(700, 213);
+            this.ClientSize = new System.Drawing.Size(784, 213);
             this.Controls.Add(this.labelScreenShotState);
             this.Controls.Add(buttonOpenScreenShotFolder);
             this.Controls.Add(buttonScreenShot);
