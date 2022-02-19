@@ -23,7 +23,6 @@ namespace StarlightResize
         {
             InitializeComponent();
             ReloadDisplayList();
-            hook.HookToFullScreen();
         }
 
         private Hook hook = new(Keys.F11, (key) =>
@@ -204,9 +203,19 @@ namespace StarlightResize
             Process.Start("explorer.exe", getScreenshotFolder());
         }
 
-        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+
+        /// <summary>
+        /// 使用中のリソースをすべてクリーンアップします。
+        /// </summary>
+        /// <param name="disposing">マネージド リソースを破棄する場合は true を指定し、その他の場合は false を指定します。</param>
+        protected override void Dispose(bool disposing)
         {
-            hook.UnHook();
+            if (disposing)
+            {
+                components?.Dispose();
+                hook?.Dispose();
+            }
+            base.Dispose(disposing);
         }
     }
 }
