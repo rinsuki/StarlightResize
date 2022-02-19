@@ -429,6 +429,7 @@ namespace StarlightResize
             this.MaximizeBox = false;
             this.Name = "Form1";
             this.Text = "StarlightResize";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             tableLayoutPanel1.ResumeLayout(false);
             tableLayoutPanel1.PerformLayout();
             tableLayoutPanel2.ResumeLayout(false);

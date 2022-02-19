@@ -23,7 +23,13 @@ namespace StarlightResize
         {
             InitializeComponent();
             ReloadDisplayList();
+            hook.HookToFullScreen();
         }
+
+        private Hook hook = new(Keys.F11, (key) =>
+        {
+            _ = MessageBox.Show(key.ToString());
+        });
 
         private void ReloadDisplayList()
         {
@@ -36,6 +42,7 @@ namespace StarlightResize
 
         private void buttonResize_Click(object sender, EventArgs e)
         {
+
             var screen = comboBoxDisplay.SelectedItem as Screen;
             if (screen == null)
             {
@@ -72,7 +79,8 @@ namespace StarlightResize
                 // 中央寄せ
                 newPoint.x += (screen.Bounds.Width - width) / 2;
                 newPoint.y += (screen.Bounds.Height - height) / 2;
-            } else
+            }
+            else
             {
                 if (radioButtonPosRightBottom.Checked || radioButtonPosLeftBottom.Checked)
                 {
@@ -130,7 +138,7 @@ namespace StarlightResize
             }
             SetResolution(screen.Bounds.Width, screen.Bounds.Height);
         }
-        
+
         private string getScreenshotFolder()
         {
             var picturesFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures, Environment.SpecialFolderOption.Create);
@@ -194,6 +202,11 @@ namespace StarlightResize
         private void buttonOpenScreenShotFolder_Click(object sender, EventArgs e)
         {
             Process.Start("explorer.exe", getScreenshotFolder());
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            hook.UnHook();
         }
     }
 }
