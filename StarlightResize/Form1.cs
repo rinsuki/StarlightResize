@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -14,6 +14,12 @@ using Windows.Win32;
 using Windows.Win32.Foundation;
 using Windows.Win32.Graphics.Gdi;
 using Windows.Win32.Storage.Xps;
+using Windows.Win32.UI.WindowsAndMessaging;
+using static Windows.Win32.PInvoke;
+using static Windows.Win32.Constants;
+using static Windows.Win32.UI.WindowsAndMessaging.WINDOW_LONG_PTR_INDEX;
+using static Windows.Win32.UI.WindowsAndMessaging.WINDOW_STYLE;
+using static Windows.Win32.UI.WindowsAndMessaging.SET_WINDOW_POS_FLAGS;
 
 namespace StarlightResize
 {
@@ -25,9 +31,56 @@ namespace StarlightResize
             ReloadDisplayList();
         }
 
+        // フルスクリーンにする前のウィンドウ位置情報
+        private static WINDOWPLACEMENT wpPrev = new();
+
         private Hook hook = new(Keys.F11, (key) =>
         {
-            _ = MessageBox.Show(key.ToString());
+            const WINDOW_STYLE noFullScreenStyles = WS_GROUP | WS_SIZEBOX | WS_SYSMENU | WS_CAPTION;
+
+            // デレステが起動してなければ中断
+            var process = Process.GetProcessesByName("imascgstage").FirstOrDefault();
+            if (process == null) return;
+
+            // フォアグラウンドウィンドウがデレステでなければ中断
+            var hwnd = (HWND)process.MainWindowHandle;
+            if (hwnd != GetForegroundWindow()) return;
+
+            // ウィンドウスタイル判定
+            var dwStyle = (WINDOW_STYLE)GetWindowLongPtr(hwnd, GWL_STYLE);
+            if (dwStyle.HasFlag(noFullScreenStyles))
+            {
+                // 通常ウィンドウ時のサイズと位置を保存
+                if (GetWindowPlacement(hwnd, ref wpPrev))
+                {
+                    // ウィンドウスタイル変更
+                    SetWindowLongPtr(hwnd, GWL_STYLE, (nint)(dwStyle & ~noFullScreenStyles));
+
+                    // ウィンドウサイズ変更
+                    // MoveWindowが失敗してディスプレイサイズにならない場合があるので、サイズ判定によるループを行っている。
+                    Size size = new();
+                    var screen = Screen.FromHandle(hwnd);
+                    while (size != screen.Bounds.Size)
+                    {
+                        // X, Yを負の値にしてる理由……これでデレステのウィンドウサイズ制限を突破できたため。
+                        MoveWindow(hwnd, -100, -100, screen.Bounds.Width, screen.Bounds.Height, false);
+                        GetWindowRect(hwnd, out var windowRect);
+                        size = new(windowRect.right - windowRect.left, windowRect.bottom - windowRect.top);
+                    }
+
+                    // ウィンドウ位置変更、最前面固定
+                    SetWindowPos(hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_FRAMECHANGED);
+                }
+            }
+            else
+            {
+                // ウィンドウスタイル復元
+                SetWindowLongPtr(hwnd, GWL_STYLE, (nint)(dwStyle | noFullScreenStyles));
+                // ウィンドウサイズと位置を復元
+                SetWindowPlacement(hwnd, wpPrev);
+                // 最前面固定を解除
+                SetWindowPos(hwnd, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_FRAMECHANGED);
+            }
         });
 
         private void ReloadDisplayList()
