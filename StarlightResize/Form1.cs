@@ -36,8 +36,6 @@ namespace StarlightResize
 
         private Hook hook = new(Keys.F11, (key) =>
         {
-            const WINDOW_STYLE noFullScreenStyles = WS_GROUP | WS_SIZEBOX | WS_SYSMENU | WS_CAPTION;
-
             // デレステが起動してなければ中断
             var process = Process.GetProcessesByName("imascgstage").FirstOrDefault();
             if (process == null) return;
@@ -45,6 +43,14 @@ namespace StarlightResize
             // フォアグラウンドウィンドウがデレステでなければ中断
             var hwnd = (HWND)process.MainWindowHandle;
             if (hwnd != GetForegroundWindow()) return;
+            
+            // デレステが存在するウィンドウでフルスクリーン化させる
+            ToggleBorderlessWindow(hwnd, Screen.FromHandle(hwnd));
+        });
+
+        private static void ToggleBorderlessWindow(HWND hwnd, Screen screen)
+        {
+            const WINDOW_STYLE noFullScreenStyles = WS_GROUP | WS_SIZEBOX | WS_SYSMENU | WS_CAPTION;
 
             // ウィンドウスタイル判定
             var dwStyle = (WINDOW_STYLE)GetWindowLongPtr(hwnd, GWL_STYLE);
@@ -59,7 +65,6 @@ namespace StarlightResize
                     // ウィンドウサイズ変更
                     // MoveWindowが失敗してディスプレイサイズにならない場合があるので、サイズ判定によるループを行っている。
                     Size size = new();
-                    var screen = Screen.FromHandle(hwnd);
                     while (size != screen.Bounds.Size)
                     {
                         // X, Yを負の値にしてる理由……これでデレステのウィンドウサイズ制限を突破できたため。
@@ -81,7 +86,7 @@ namespace StarlightResize
                 // 最前面固定を解除
                 SetWindowPos(hwnd, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_FRAMECHANGED);
             }
-        });
+        }
 
         private void ReloadDisplayList()
         {
@@ -90,6 +95,24 @@ namespace StarlightResize
             {
                 comboBoxDisplay.Items.Add(screen);
             }
+        }
+
+        private void buttonToggleBorderlessWindow_Click(object sender, EventArgs e)
+        {
+            var screen = comboBoxDisplay.SelectedItem as Screen;
+            if (screen == null)
+            {
+                MessageBox.Show("ディスプレイが指定されていません。\n先にデレステを表示するディスプレイを選択してください。", "StarlightResize", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            var process = Process.GetProcessesByName("imascgstage").FirstOrDefault();
+            if (process == null)
+            {
+                MessageBox.Show("デレステのウィンドウが見つかりませんでした。\nデレステが起動していることを確認してください。", "StarlightResize", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            ToggleBorderlessWindow((HWND)process.MainWindowHandle, screen);
         }
 
         private void buttonResize_Click(object sender, EventArgs e)
@@ -260,7 +283,6 @@ namespace StarlightResize
         {
             Process.Start("explorer.exe", getScreenshotFolder());
         }
-
 
         /// <summary>
         /// 使用中のリソースをすべてクリーンアップします。

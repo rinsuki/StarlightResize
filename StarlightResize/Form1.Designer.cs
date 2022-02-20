@@ -44,6 +44,7 @@ namespace StarlightResize
             this.checkBoxSetResToDisplayAutomatically = new System.Windows.Forms.CheckBox();
             this.buttonResize = new System.Windows.Forms.Button();
             this.labelScreenShotState = new System.Windows.Forms.Label();
+            this.buttonToggleBorderlessWindow = new System.Windows.Forms.Button();
             tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             label1 = new System.Windows.Forms.Label();
@@ -414,11 +415,22 @@ namespace StarlightResize
             this.labelScreenShotState.Text = "準備完了";
             this.labelScreenShotState.UseMnemonic = false;
             // 
+            // buttonToggleBorderlessWindow
+            // 
+            this.buttonToggleBorderlessWindow.Location = new System.Drawing.Point(116, 148);
+            this.buttonToggleBorderlessWindow.Name = "buttonToggleBorderlessWindow";
+            this.buttonToggleBorderlessWindow.Size = new System.Drawing.Size(164, 23);
+            this.buttonToggleBorderlessWindow.TabIndex = 27;
+            this.buttonToggleBorderlessWindow.Text = "ボーダーレス ウィンドウ切替";
+            this.buttonToggleBorderlessWindow.UseVisualStyleBackColor = true;
+            this.buttonToggleBorderlessWindow.Click += new System.EventHandler(this.buttonToggleBorderlessWindow_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(784, 213);
+            this.Controls.Add(this.buttonToggleBorderlessWindow);
             this.Controls.Add(this.labelScreenShotState);
             this.Controls.Add(buttonOpenScreenShotFolder);
             this.Controls.Add(buttonScreenShot);
@@ -455,6 +467,7 @@ namespace StarlightResize
         private System.Windows.Forms.CheckBox checkBoxSetResToDisplayAutomatically;
         private System.Windows.Forms.Button buttonResize;
         private System.Windows.Forms.Label labelScreenShotState;
+        private System.Windows.Forms.Button buttonToggleBorderlessWindow;
     }
 }
 
