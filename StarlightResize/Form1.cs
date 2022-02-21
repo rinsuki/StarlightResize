@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Runtime.InteropServices;
 using Windows.Win32;
 using Windows.Win32.Foundation;
 using Windows.Win32.Graphics.Gdi;
@@ -17,6 +18,7 @@ using Windows.Win32.Storage.Xps;
 using Windows.Win32.UI.WindowsAndMessaging;
 using static Windows.Win32.PInvoke;
 using static Windows.Win32.Constants;
+using static Windows.Win32.UI.WindowsAndMessaging.SHOW_WINDOW_CMD;
 using static Windows.Win32.UI.WindowsAndMessaging.WINDOW_LONG_PTR_INDEX;
 using static Windows.Win32.UI.WindowsAndMessaging.WINDOW_STYLE;
 using static Windows.Win32.UI.WindowsAndMessaging.SET_WINDOW_POS_FLAGS;
@@ -25,30 +27,45 @@ namespace StarlightResize
 {
     public partial class Form1 : Form
     {
+        // 通常ウィンドウに切り替える際に使用する位置情報
+        private WINDOWPLACEMENT wpPrev;
+
+        private Hook hook;
+
         public Form1()
         {
             InitializeComponent();
             ReloadDisplayList();
+
+            // ウィンドウ位置情報の初期化
+            // 起動時、すでにデレステが通常ウィンドウ以外だった時に必要になる。
+            wpPrev = new WINDOWPLACEMENT()
+            {
+                flags = 0,
+                length = (uint)Marshal.SizeOf<WINDOWPLACEMENT>(),
+                ptMaxPosition = new POINT() { x = -1, y = -1 },
+                ptMinPosition = new POINT() { x = -1, y = -1 },
+                rcNormalPosition = new RECT() { top = 0, bottom = 1280, left = 0, right = 720 },
+                showCmd = SW_NORMAL
+            };
+
+            // キーボードフックセットアップ
+            hook = new(Keys.F11, (_) =>
+            {
+                // デレステが起動してなければ中断
+                var process = Process.GetProcessesByName("imascgstage").FirstOrDefault();
+                if (process == null) return;
+
+                // フォアグラウンドウィンドウがデレステでなければ中断
+                var hwnd = (HWND)process.MainWindowHandle;
+                if (hwnd != GetForegroundWindow()) return;
+
+                // デレステが存在するウィンドウでフルスクリーン化させる
+                ToggleBorderlessWindow(hwnd, Screen.FromHandle(hwnd));
+            });
         }
 
-        // フルスクリーンにする前のウィンドウ位置情報
-        private static WINDOWPLACEMENT wpPrev = new();
-
-        private Hook hook = new(Keys.F11, (key) =>
-        {
-            // デレステが起動してなければ中断
-            var process = Process.GetProcessesByName("imascgstage").FirstOrDefault();
-            if (process == null) return;
-
-            // フォアグラウンドウィンドウがデレステでなければ中断
-            var hwnd = (HWND)process.MainWindowHandle;
-            if (hwnd != GetForegroundWindow()) return;
-            
-            // デレステが存在するウィンドウでフルスクリーン化させる
-            ToggleBorderlessWindow(hwnd, Screen.FromHandle(hwnd));
-        });
-
-        private static void ToggleBorderlessWindow(HWND hwnd, Screen screen)
+        private void ToggleBorderlessWindow(HWND hwnd, Screen screen)
         {
             const WINDOW_STYLE noFullScreenStyles = WS_GROUP | WS_SIZEBOX | WS_SYSMENU | WS_CAPTION;
 
@@ -74,7 +91,8 @@ namespace StarlightResize
                     }
 
                     // ウィンドウ位置変更、最前面固定
-                    SetWindowPos(hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_FRAMECHANGED);
+                    var hWndInsertAfter = checkBoxIsTopMost.Checked ? HWND_TOPMOST : HWND_NOTOPMOST;
+                    SetWindowPos(hwnd, hWndInsertAfter, screen.Bounds.X, screen.Bounds.Y, 0, 0, SWP_NOSIZE | SWP_FRAMECHANGED);
                 }
             }
             else
@@ -97,39 +115,44 @@ namespace StarlightResize
             }
         }
 
-        private void buttonToggleBorderlessWindow_Click(object sender, EventArgs e)
+        private bool TryGetImascgstageProcess(out Process imascgstageProc)
         {
-            var screen = comboBoxDisplay.SelectedItem as Screen;
+            imascgstageProc = Process.GetProcessesByName("imascgstage").FirstOrDefault();
+            if (imascgstageProc == null)
+            {
+                MessageBox.Show("デレステのウィンドウが見つかりませんでした。\nデレステが起動していることを確認してください。", "StarlightResize", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        private bool TryGetSelectedScreen(out Screen screen)
+        {
+            screen = comboBoxDisplay.SelectedItem as Screen;
             if (screen == null)
             {
                 MessageBox.Show("ディスプレイが指定されていません。\n先にデレステを表示するディスプレイを選択してください。", "StarlightResize", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
+                return false;
             }
-            var process = Process.GetProcessesByName("imascgstage").FirstOrDefault();
-            if (process == null)
+            else
             {
-                MessageBox.Show("デレステのウィンドウが見つかりませんでした。\nデレステが起動していることを確認してください。", "StarlightResize", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
+                return true;
             }
+        }
 
+        private void buttonToggleBorderlessWindow_Click(object sender, EventArgs e)
+        {
+            if (!TryGetSelectedScreen(out var screen) || !TryGetImascgstageProcess(out var process)) return;
             ToggleBorderlessWindow((HWND)process.MainWindowHandle, screen);
         }
 
         private void buttonResize_Click(object sender, EventArgs e)
         {
 
-            var screen = comboBoxDisplay.SelectedItem as Screen;
-            if (screen == null)
-            {
-                MessageBox.Show("ディスプレイが指定されていません。\n先にデレステを表示するディスプレイを選択してください。", "StarlightResize", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-            var process = Process.GetProcessesByName("imascgstage").FirstOrDefault();
-            if (process == null)
-            {
-                MessageBox.Show("デレステのウィンドウが見つかりませんでした。\nデレステが起動していることを確認してください。", "StarlightResize", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
+            if (!TryGetSelectedScreen(out var screen) || !TryGetImascgstageProcess(out var process)) return;
 
             var width = (int)numericUpDownWidth.Value;
             var height = (int)numericUpDownHeight.Value;
@@ -210,12 +233,7 @@ namespace StarlightResize
 
         private void buttonSetResToDisplay_Click(object sender, EventArgs e)
         {
-            var screen = comboBoxDisplay.SelectedItem as Screen;
-            if (screen == null)
-            {
-                MessageBox.Show("ディスプレイが指定されていません。\n先にデレステを表示するディスプレイを選択してください", "StarlightResize", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
+            if (!TryGetSelectedScreen(out var screen)) return;
             SetResolution(screen.Bounds.Width, screen.Bounds.Height);
         }
 
@@ -233,12 +251,7 @@ namespace StarlightResize
             // TODO: 保存先を変えられるようにする
             var starlightResizePicturesFolder = getScreenshotFolder();
 
-            var process = Process.GetProcessesByName("imascgstage").FirstOrDefault();
-            if (process == null)
-            {
-                MessageBox.Show("デレステのウィンドウが見つかりませんでした。\nデレステが起動していることを確認してください。", "StarlightResize", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
+            if (!TryGetImascgstageProcess(out var process)) return;
             var hWnd = (HWND)process.MainWindowHandle;
             PInvoke.GetClientRect(hWnd, out var clientRect);
             // 絶妙に黒に近い色がなんか透過色になってしまう (GIFじゃねーんだぞ)

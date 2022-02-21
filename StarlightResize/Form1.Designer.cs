@@ -45,6 +45,7 @@ namespace StarlightResize
             this.buttonResize = new System.Windows.Forms.Button();
             this.labelScreenShotState = new System.Windows.Forms.Label();
             this.buttonToggleBorderlessWindow = new System.Windows.Forms.Button();
+            this.checkBoxIsTopMost = new System.Windows.Forms.CheckBox();
             tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             label1 = new System.Windows.Forms.Label();
@@ -425,11 +426,24 @@ namespace StarlightResize
             this.buttonToggleBorderlessWindow.UseVisualStyleBackColor = true;
             this.buttonToggleBorderlessWindow.Click += new System.EventHandler(this.buttonToggleBorderlessWindow_Click);
             // 
+            // checkBoxIsTopMost
+            // 
+            this.checkBoxIsTopMost.AutoSize = true;
+            this.checkBoxIsTopMost.Checked = true;
+            this.checkBoxIsTopMost.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxIsTopMost.Location = new System.Drawing.Point(297, 151);
+            this.checkBoxIsTopMost.Name = "checkBoxIsTopMost";
+            this.checkBoxIsTopMost.Size = new System.Drawing.Size(239, 19);
+            this.checkBoxIsTopMost.TabIndex = 28;
+            this.checkBoxIsTopMost.Text = "ボーダーレスウィンドウを常に最前面に表示する";
+            this.checkBoxIsTopMost.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(784, 213);
+            this.Controls.Add(this.checkBoxIsTopMost);
             this.Controls.Add(this.buttonToggleBorderlessWindow);
             this.Controls.Add(this.labelScreenShotState);
             this.Controls.Add(buttonOpenScreenShotFolder);
@@ -468,6 +482,7 @@ namespace StarlightResize
         private System.Windows.Forms.Button buttonResize;
         private System.Windows.Forms.Label labelScreenShotState;
         private System.Windows.Forms.Button buttonToggleBorderlessWindow;
+        private System.Windows.Forms.CheckBox checkBoxIsTopMost;
     }
 }
 
