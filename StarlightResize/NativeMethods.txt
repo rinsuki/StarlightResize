@@ -13,6 +13,7 @@ SetWindowsHookEx
 CallNextHookEx
 GetModuleHandle
 WM_KEYDOWN
+WM_SYSKEYDOWN
 GetWindowLongPtr
 SetWindowLongPtr
 SetWindowPos
@@ -24,3 +25,4 @@ SetWindowPlacement
 HWND_TOPMOST
 HWND_NOTOPMOST
 GetForegroundWindow
+KBDLLHOOKSTRUCT

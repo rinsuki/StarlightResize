@@ -18,6 +18,7 @@ namespace StarlightResize
         {
             System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
             System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
+            System.Windows.Forms.Label label7;
             System.Windows.Forms.Label label1;
             System.Windows.Forms.Label label6;
             System.Windows.Forms.Label label2;
@@ -38,16 +39,19 @@ namespace StarlightResize
             this.radioButtonPosCenter = new System.Windows.Forms.RadioButton();
             this.radioButtonPosRightBottom = new System.Windows.Forms.RadioButton();
             this.radioButtonPosRightTop = new System.Windows.Forms.RadioButton();
+            this.textBoxHookKey = new System.Windows.Forms.TextBox();
             this.comboBoxDisplay = new System.Windows.Forms.ComboBox();
             this.numericUpDownWidth = new System.Windows.Forms.NumericUpDown();
             this.numericUpDownHeight = new System.Windows.Forms.NumericUpDown();
+            this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.checkBoxSetResToDisplayAutomatically = new System.Windows.Forms.CheckBox();
+            this.checkBoxIsTopMost = new System.Windows.Forms.CheckBox();
             this.buttonResize = new System.Windows.Forms.Button();
             this.labelScreenShotState = new System.Windows.Forms.Label();
             this.buttonToggleBorderlessWindow = new System.Windows.Forms.Button();
-            this.checkBoxIsTopMost = new System.Windows.Forms.CheckBox();
             tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+            label7 = new System.Windows.Forms.Label();
             label1 = new System.Windows.Forms.Label();
             label6 = new System.Windows.Forms.Label();
             label2 = new System.Windows.Forms.Label();
@@ -68,6 +72,7 @@ namespace StarlightResize
             flowLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownWidth)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownHeight)).BeginInit();
+            this.tableLayoutPanel3.SuspendLayout();
             this.SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -79,16 +84,17 @@ namespace StarlightResize
             tableLayoutPanel1.ColumnCount = 2;
             tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            tableLayoutPanel1.Controls.Add(tableLayoutPanel2, 1, 3);
+            tableLayoutPanel1.Controls.Add(tableLayoutPanel2, 1, 4);
             tableLayoutPanel1.Controls.Add(this.comboBoxDisplay, 1, 0);
             tableLayoutPanel1.Controls.Add(label1, 0, 0);
-            tableLayoutPanel1.Controls.Add(label6, 0, 3);
+            tableLayoutPanel1.Controls.Add(label6, 0, 4);
             tableLayoutPanel1.Controls.Add(label2, 0, 1);
             tableLayoutPanel1.Controls.Add(flowLayoutPanel1, 1, 1);
-            tableLayoutPanel1.Controls.Add(this.checkBoxSetResToDisplayAutomatically, 1, 2);
+            tableLayoutPanel1.Controls.Add(this.tableLayoutPanel3, 1, 3);
             tableLayoutPanel1.Location = new System.Drawing.Point(12, 9);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
-            tableLayoutPanel1.RowCount = 4;
+            tableLayoutPanel1.RowCount = 5;
+            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -98,24 +104,32 @@ namespace StarlightResize
             // 
             // tableLayoutPanel2
             // 
+            tableLayoutPanel2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             tableLayoutPanel2.AutoSize = true;
             tableLayoutPanel2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            tableLayoutPanel2.ColumnCount = 3;
+            tableLayoutPanel2.ColumnCount = 6;
             tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 96F));
+            tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             tableLayoutPanel2.Controls.Add(this.radioButtonPosLeftTop, 0, 0);
             tableLayoutPanel2.Controls.Add(this.radioButtonPosLeftBottom, 0, 1);
             tableLayoutPanel2.Controls.Add(this.radioButtonPosCenter, 1, 0);
             tableLayoutPanel2.Controls.Add(this.radioButtonPosRightBottom, 2, 1);
             tableLayoutPanel2.Controls.Add(this.radioButtonPosRightTop, 2, 0);
+            tableLayoutPanel2.Controls.Add(this.textBoxHookKey, 5, 0);
+            tableLayoutPanel2.Controls.Add(label7, 4, 0);
             tableLayoutPanel2.Location = new System.Drawing.Point(68, 83);
             tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
             tableLayoutPanel2.Name = "tableLayoutPanel2";
             tableLayoutPanel2.RowCount = 2;
             tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            tableLayoutPanel2.Size = new System.Drawing.Size(165, 50);
+            tableLayoutPanel2.Size = new System.Drawing.Size(674, 50);
             tableLayoutPanel2.TabIndex = 22;
             // 
             // radioButtonPosLeftTop
@@ -171,6 +185,32 @@ namespace StarlightResize
             this.radioButtonPosRightTop.TabIndex = 15;
             this.radioButtonPosRightTop.Text = "右上";
             this.radioButtonPosRightTop.UseVisualStyleBackColor = true;
+            // 
+            // textBoxHookKey
+            // 
+            this.textBoxHookKey.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBoxHookKey.Location = new System.Drawing.Point(413, 0);
+            this.textBoxHookKey.Margin = new System.Windows.Forms.Padding(0);
+            this.textBoxHookKey.Name = "textBoxHookKey";
+            this.textBoxHookKey.Size = new System.Drawing.Size(261, 23);
+            this.textBoxHookKey.TabIndex = 29;
+            this.textBoxHookKey.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.textBoxHookKey.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBoxHookKey_KeyDown);
+            this.textBoxHookKey.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxHookKey_KeyPress);
+            this.textBoxHookKey.Leave += new System.EventHandler(this.textBoxHookKey_Leave);
+            // 
+            // label7
+            // 
+            label7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            label7.AutoSize = true;
+            label7.Location = new System.Drawing.Point(264, 5);
+            label7.Margin = new System.Windows.Forms.Padding(3, 5, 3, 0);
+            label7.Name = "label7";
+            label7.Size = new System.Drawing.Size(146, 15);
+            label7.TabIndex = 30;
+            label7.Text = "ボーダーレスウィンドウ切替キー:";
             // 
             // comboBoxDisplay
             // 
@@ -365,16 +405,43 @@ namespace StarlightResize
             buttonSetResToDisplay.UseVisualStyleBackColor = true;
             buttonSetResToDisplay.Click += new System.EventHandler(this.buttonSetResToDisplay_Click);
             // 
+            // tableLayoutPanel3
+            // 
+            this.tableLayoutPanel3.ColumnCount = 2;
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel3.Controls.Add(this.checkBoxSetResToDisplayAutomatically, 0, 0);
+            this.tableLayoutPanel3.Controls.Add(this.checkBoxIsTopMost, 1, 0);
+            this.tableLayoutPanel3.Location = new System.Drawing.Point(68, 58);
+            this.tableLayoutPanel3.Margin = new System.Windows.Forms.Padding(0);
+            this.tableLayoutPanel3.Name = "tableLayoutPanel3";
+            this.tableLayoutPanel3.RowCount = 1;
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(674, 25);
+            this.tableLayoutPanel3.TabIndex = 23;
+            // 
             // checkBoxSetResToDisplayAutomatically
             // 
             this.checkBoxSetResToDisplayAutomatically.AutoSize = true;
             this.checkBoxSetResToDisplayAutomatically.Enabled = false;
-            this.checkBoxSetResToDisplayAutomatically.Location = new System.Drawing.Point(71, 61);
+            this.checkBoxSetResToDisplayAutomatically.Location = new System.Drawing.Point(3, 3);
             this.checkBoxSetResToDisplayAutomatically.Name = "checkBoxSetResToDisplayAutomatically";
             this.checkBoxSetResToDisplayAutomatically.Size = new System.Drawing.Size(287, 19);
             this.checkBoxSetResToDisplayAutomatically.TabIndex = 12;
             this.checkBoxSetResToDisplayAutomatically.Text = "ディスプレイ変更時に解像度を自動更新 (現在未実装)";
             this.checkBoxSetResToDisplayAutomatically.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxIsTopMost
+            // 
+            this.checkBoxIsTopMost.AutoSize = true;
+            this.checkBoxIsTopMost.Checked = true;
+            this.checkBoxIsTopMost.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxIsTopMost.Location = new System.Drawing.Point(340, 3);
+            this.checkBoxIsTopMost.Name = "checkBoxIsTopMost";
+            this.checkBoxIsTopMost.Size = new System.Drawing.Size(239, 19);
+            this.checkBoxIsTopMost.TabIndex = 28;
+            this.checkBoxIsTopMost.Text = "ボーダーレスウィンドウを常に最前面に表示する";
+            this.checkBoxIsTopMost.UseVisualStyleBackColor = true;
             // 
             // buttonScreenShot
             // 
@@ -388,7 +455,7 @@ namespace StarlightResize
             // 
             // buttonOpenScreenShotFolder
             // 
-            buttonOpenScreenShotFolder.Location = new System.Drawing.Point(569, 178);
+            buttonOpenScreenShotFolder.Location = new System.Drawing.Point(636, 178);
             buttonOpenScreenShotFolder.Name = "buttonOpenScreenShotFolder";
             buttonOpenScreenShotFolder.Size = new System.Drawing.Size(118, 23);
             buttonOpenScreenShotFolder.TabIndex = 25;
@@ -426,24 +493,11 @@ namespace StarlightResize
             this.buttonToggleBorderlessWindow.UseVisualStyleBackColor = true;
             this.buttonToggleBorderlessWindow.Click += new System.EventHandler(this.buttonToggleBorderlessWindow_Click);
             // 
-            // checkBoxIsTopMost
-            // 
-            this.checkBoxIsTopMost.AutoSize = true;
-            this.checkBoxIsTopMost.Checked = true;
-            this.checkBoxIsTopMost.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxIsTopMost.Location = new System.Drawing.Point(297, 151);
-            this.checkBoxIsTopMost.Name = "checkBoxIsTopMost";
-            this.checkBoxIsTopMost.Size = new System.Drawing.Size(239, 19);
-            this.checkBoxIsTopMost.TabIndex = 28;
-            this.checkBoxIsTopMost.Text = "ボーダーレスウィンドウを常に最前面に表示する";
-            this.checkBoxIsTopMost.UseVisualStyleBackColor = true;
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(784, 213);
-            this.Controls.Add(this.checkBoxIsTopMost);
             this.Controls.Add(this.buttonToggleBorderlessWindow);
             this.Controls.Add(this.labelScreenShotState);
             this.Controls.Add(buttonOpenScreenShotFolder);
@@ -455,6 +509,7 @@ namespace StarlightResize
             this.MaximizeBox = false;
             this.Name = "Form1";
             this.Text = "StarlightResize";
+            this.Deactivate += new System.EventHandler(this.Form1_Deactivate);
             tableLayoutPanel1.ResumeLayout(false);
             tableLayoutPanel1.PerformLayout();
             tableLayoutPanel2.ResumeLayout(false);
@@ -463,6 +518,8 @@ namespace StarlightResize
             flowLayoutPanel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownWidth)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownHeight)).EndInit();
+            this.tableLayoutPanel3.ResumeLayout(false);
+            this.tableLayoutPanel3.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -483,6 +540,8 @@ namespace StarlightResize
         private System.Windows.Forms.Label labelScreenShotState;
         private System.Windows.Forms.Button buttonToggleBorderlessWindow;
         private System.Windows.Forms.CheckBox checkBoxIsTopMost;
+        private System.Windows.Forms.TextBox textBoxHookKey;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
     }
 }
 

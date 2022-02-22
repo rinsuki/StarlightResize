@@ -8,15 +8,16 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.Keys;
 using System.Runtime.InteropServices;
 using Windows.Win32;
 using Windows.Win32.Foundation;
 using Windows.Win32.Graphics.Gdi;
 using Windows.Win32.Storage.Xps;
 using Windows.Win32.UI.WindowsAndMessaging;
-using static Windows.Win32.PInvoke;
 using static Windows.Win32.Constants;
 using static Windows.Win32.UI.WindowsAndMessaging.SHOW_WINDOW_CMD;
 using static Windows.Win32.UI.WindowsAndMessaging.WINDOW_LONG_PTR_INDEX;
@@ -50,7 +51,8 @@ namespace StarlightResize
             };
 
             // キーボードフックセットアップ
-            hook = new(Keys.F11, (_) =>
+            textBoxHookKey.Text = $"{F11}";
+            hook = new(Enum.Parse<Keys>(textBoxHookKey.Text), (_) =>
             {
                 // デレステが起動してなければ中断
                 var process = Process.GetProcessesByName("imascgstage").FirstOrDefault();
@@ -58,7 +60,7 @@ namespace StarlightResize
 
                 // フォアグラウンドウィンドウがデレステでなければ中断
                 var hwnd = (HWND)process.MainWindowHandle;
-                if (hwnd != GetForegroundWindow()) return;
+                if (hwnd != PInvoke.GetForegroundWindow()) return;
 
                 // デレステが存在するウィンドウでフルスクリーン化させる
                 ToggleBorderlessWindow(hwnd, Screen.FromHandle(hwnd));
@@ -70,39 +72,69 @@ namespace StarlightResize
             const WINDOW_STYLE noFullScreenStyles = WS_GROUP | WS_SIZEBOX | WS_SYSMENU | WS_CAPTION;
 
             // ウィンドウスタイル判定
-            var dwStyle = (WINDOW_STYLE)GetWindowLongPtr(hwnd, GWL_STYLE);
+            var dwStyle = (WINDOW_STYLE)PInvoke.GetWindowLongPtr(hwnd, GWL_STYLE);
             if (dwStyle.HasFlag(noFullScreenStyles))
             {
                 // 通常ウィンドウ時のサイズと位置を保存
-                if (GetWindowPlacement(hwnd, ref wpPrev))
+                if (PInvoke.GetWindowPlacement(hwnd, ref wpPrev))
                 {
                     // ウィンドウスタイル変更
-                    SetWindowLongPtr(hwnd, GWL_STYLE, (nint)(dwStyle & ~noFullScreenStyles));
+                    PInvoke.SetWindowLongPtr(hwnd, GWL_STYLE, (nint)(dwStyle & ~noFullScreenStyles));
 
-                    // ウィンドウサイズ変更
-                    // MoveWindowが失敗してディスプレイサイズにならない場合があるので、サイズ判定によるループを行っている。
-                    Size size = new();
-                    while (size != screen.Bounds.Size)
-                    {
-                        // X, Yを負の値にしてる理由……これでデレステのウィンドウサイズ制限を突破できたため。
-                        MoveWindow(hwnd, -100, -100, screen.Bounds.Width, screen.Bounds.Height, false);
-                        GetWindowRect(hwnd, out var windowRect);
-                        size = new(windowRect.right - windowRect.left, windowRect.bottom - windowRect.top);
-                    }
-
-                    // ウィンドウ位置変更、最前面固定
-                    var hWndInsertAfter = checkBoxIsTopMost.Checked ? HWND_TOPMOST : HWND_NOTOPMOST;
-                    SetWindowPos(hwnd, hWndInsertAfter, screen.Bounds.X, screen.Bounds.Y, 0, 0, SWP_NOSIZE | SWP_FRAMECHANGED);
+                    // ウィンドウサイズ、位置、Zオーダー変更
+                    PInvoke.SetWindowPos(
+                        hwnd,
+                        checkBoxIsTopMost.Checked ? HWND_TOPMOST : HWND_NOTOPMOST,
+                        screen.Bounds.X,
+                        screen.Bounds.Y,
+                        screen.Bounds.Width,
+                        screen.Bounds.Height,
+                        SWP_ASYNCWINDOWPOS | SWP_NOSENDCHANGING | SWP_FRAMECHANGED);
                 }
             }
             else
             {
                 // ウィンドウスタイル復元
-                SetWindowLongPtr(hwnd, GWL_STYLE, (nint)(dwStyle | noFullScreenStyles));
+                PInvoke.SetWindowLongPtr(hwnd, GWL_STYLE, (nint)(dwStyle | noFullScreenStyles));
                 // ウィンドウサイズと位置を復元
-                SetWindowPlacement(hwnd, wpPrev);
+                // 違うDPIのモニタ間の移動に対応するため2回実行
+                PInvoke.SetWindowPlacement(hwnd, wpPrev);
+                PInvoke.SetWindowPlacement(hwnd, wpPrev);
                 // 最前面固定を解除
-                SetWindowPos(hwnd, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_FRAMECHANGED);
+                PInvoke.SetWindowPos(hwnd, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_ASYNCWINDOWPOS | SWP_NOMOVE | SWP_NOSIZE | SWP_FRAMECHANGED);
+            }
+        }
+
+        // フックするキーの設定
+        private void textBoxHookKey_KeyDown(object sender, KeyEventArgs e)
+        {
+            // 押下しているキーをテキストボックスに表示
+            ((TextBox)sender).Text = $"{e.KeyData}";
+
+            // 入力イベントキャンセル
+            e.Handled = true;
+        }
+
+        // 入力イベントキャンセル
+        // KeyDownイベントだけではすべての入力イベントをキャンセルできない
+        private void textBoxHookKey_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            e.Handled = true;
+        }
+
+        private void textBoxHookKey_Leave(object sender, EventArgs e)
+        {
+            // 押下したキーが修飾キーのみかを検証
+            // NG例) ControlKey, Shift, Control
+            // lang=regex
+            const string ngPattern = @"(?<!\w)(ControlKey|ShiftKey|Menu)(?!\w)";
+            if (Regex.IsMatch(textBoxHookKey.Text, ngPattern))
+            {
+                textBoxHookKey.Text = $"{hook.HookKey}";
+            }
+            else
+            {
+                hook.HookKey = Enum.Parse<Keys>(textBoxHookKey.Text);
             }
         }
 
@@ -297,6 +329,13 @@ namespace StarlightResize
             Process.Start("explorer.exe", getScreenshotFolder());
         }
 
+        // ウィンドウフォーカスを失ったとき
+        private void Form1_Deactivate(object sender, EventArgs e)
+        {
+            // textBoxHookKeyが選択されていたらフォーカスを外して検証を強制する。
+            if (ActiveControl == textBoxHookKey) ActiveControl = null;
+        }
+
         /// <summary>
         /// 使用中のリソースをすべてクリーンアップします。
         /// </summary>
@@ -310,5 +349,6 @@ namespace StarlightResize
             }
             base.Dispose(disposing);
         }
+
     }
 }

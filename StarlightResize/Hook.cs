@@ -19,19 +19,19 @@ namespace StarlightResize
         private bool disposedValue;
 
         public Keys HookKey { get; set; }
-        private bool IsHookKeyPressed(int nCode, WPARAM wParam, LPARAM lParam) => (nCode, wParam.Value, (Keys)(short)Marshal.ReadInt32(lParam)) switch
+
+        private bool IsHookKeyPressed(int nCode, WPARAM wParam, Keys keys) => (nCode, wParam.Value, keys) switch
         {
-            ( >= 0, WM_KEYDOWN, var key) when key == HookKey => true,
+            ( >= 0, (WM_KEYDOWN or WM_SYSKEYDOWN), _) when keys == HookKey => true,
             _ => false,
         };
 
         private LRESULT HookKeyCallback(int nCode, WPARAM wParam, LPARAM lParam)
         {
-            
-            if (IsHookKeyPressed(nCode, wParam, lParam)) hookAction(HookKey);
+            var keys = (Keys)(short)Marshal.ReadInt32(lParam) | Control.ModifierKeys;
+            if (IsHookKeyPressed(nCode, wParam, keys)) hookAction(keys);
             return CallNextHookEx(hookHandle, nCode, wParam, lParam);
         }
-
 
         public Hook(Keys hookKey, Action<Keys> action)
         {
